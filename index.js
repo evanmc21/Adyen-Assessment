@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 app.use(express.static(__dirname + '/public'));
 
-// this endpoint is (almost!) working
+
 app.post('/getPaymentMethods', (req, res) => {
   const { merchantAccount, countryCode, shopperLocale, amount } = req.body;
   checkout.paymentMethods({
@@ -48,14 +48,29 @@ app.post('/getPaymentMethods', (req, res) => {
     });
 });
 
-// build this endpoint using the example above, along with our dropin documentation -> https://docs.adyen.com/online-payments/web-drop-in/integrated-before-5-0-0?tab=codeBlockmethods_request_7#step-3-make-a-payment
 app.post('/makePayment', (req, res) => {
-  // Your code here
+  checkout.payments({
+    merchantAccount: config.merchantAccount,
+    amount: {currency: "EUR", value:1000 },
+    reference: "3782",
+    paymentMethod: req.body.paymentMethod,
+    returnUrl: "http://localhost:8080"
+  }).then(response => res.json(response))
+    .catch((err)=> {
+      res.status(err.statusCode);
+      res.json({ message: err.message});
+    })
 });
 
-// build this endpoint as well, using the documentation -> https://docs.adyen.com/online-payments/web-drop-in/integrated-before-5-0-0?tab=codeBlockmethods_request_7#step-5-additional-payment-details
 app.post('/additionalDetails', async (req, res) => {
-  // Your code here
+  checkout.paymentsDetails({
+    details: req.body.details,
+    paymentData: req.body.paymentData
+  }).then(response => res.json(response))
+  .catch((err)=> {
+    res.status(err.statusCode);
+    res.json({ message: err.message});
+  })
 })
 
 app.listen(PORT, () => {

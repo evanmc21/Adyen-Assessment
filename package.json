@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@adyen/adyen-web": "^5.3.1",
     "@adyen/api-library": "^9.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1"

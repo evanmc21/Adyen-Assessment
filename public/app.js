@@ -1,10 +1,10 @@
-// This is the drop-in config object.  It is used when initializing an instance of drop-in
+
 const config = {
-  clientKey: 'test_CTOT7ZHBDVAHBHIABJ63CUQW7QMVDQFD',
-  merchantAccount: 'MyTestAccount',
+  clientKey: 'test_RS4DYOPRHVA7PM26GLQ3IA5YLAAKD6FR',
+  merchantAccount: 'AdyenRecruitment_SF3',
   countryCode: "NL",
   shopperLocale: "en_US",
-  amount: { currency: "USD", value: 1000 }
+  amount: { currency: "EUR", value: 1000 }
 };
 
 const postRequest = async (url, payload) => {
@@ -69,7 +69,7 @@ const createDropinConfig = paymentMethodsResponse => {
     clientKey: config.clientKey,
     merchantAccount: config.merchantAccount,
     locale: config.shopperLocale,
-    removePaymentMethods: ["paypal", "ideal", "sepadirectdebit", "alipay", "unionpay"],
+    removePaymentMethods: ["paypal", "alipay", "unionpay"],
     environment: "test",
     onSubmit: async (state, dropin) => {
       const response = await postRequest('/makePayment', state.data);
@@ -86,6 +86,22 @@ const createDropinConfig = paymentMethodsResponse => {
       } else {
         showFinalResult(response);
       };
+    },
+    paymentMethodsConfiguration: {
+      card: {
+        hasHolderName: true,
+        holderNameRequired: true,
+        showPayButton: true,
+    
+        amount: {
+          value: 1000,
+          currency: "EUR"
+        },
+      ideal: {
+        showImage: false,
+        issuer: "1153"
+      },
+      },
     }
   };
 };
@@ -102,6 +118,8 @@ window.addEventListener('load', async e => {
     });
 
     const checkout = new AdyenCheckout(createDropinConfig(paymentMethodsResponse));
-    const dropin = checkout.create('dropin').mount('#dropin-container');
+    const dropin = checkout.create('dropin', {
+      openFirstPaymentMethod:false
+    }).mount('#dropin-container');
   }
 });

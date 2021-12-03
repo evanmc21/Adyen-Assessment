@@ -28,7 +28,7 @@ h2 {
   flex-flow: row wrap;
   padding: 10px;
   height: 100vh;
-  background-color: grey;
+  background-color: lightgray;
 }
 
 #header {
@@ -49,6 +49,7 @@ h2 {
 #cart-container {
   font-family: "Spartan", sans-serif;
   background-color: white;
+  color: white;
 }
 
 #cart-container img {
@@ -62,7 +63,7 @@ h2 {
   height: auto;
   padding: 10px;
   border-radius: 10px;
-  background-color: lightgray;
+  background-color: darkgreen;
 }
 
 #total-amount {
